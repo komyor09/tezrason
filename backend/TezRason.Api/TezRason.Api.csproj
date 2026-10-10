@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TezRason.Api</RootNamespace>
+    <!--
+      Offline=true — облегчённая сборка без NuGet-пакетов (только демо-режим InMemory).
+      По умолчанию (Offline=false) подключаются EF Core + PostgreSQL и Swagger.
+    -->
+    <Offline Condition="'$(Offline)' == ''">false</Offline>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Offline)' != 'true'">
+    <DefineConstants>$(DefineConstants);FULL_BUILD</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Offline)' != 'true'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Offline)' == 'true'">
+    <Compile Remove="Data/AppDbContext.cs" />
+  </ItemGroup>
+
+</Project>

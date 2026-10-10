@@ -1,0 +1,22 @@
+# Запуск PostgreSQL и API TezRason в контейнерах: docker compose up -d --build
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: tezrason
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+  api:
+    build: .
+    depends_on: [db]
+    environment:
+      Database__Provider: Postgres
+      ConnectionStrings__Default: Host=db;Port=5432;Database=tezrason;Username=postgres;Password=postgres
+      ASPNETCORE_URLS: http://+:8080
+    ports: ["5080:8080"]
+
+volumes:
+  pgdata:

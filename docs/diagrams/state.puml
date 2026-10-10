@@ -1,0 +1,23 @@
+@startuml
+!include skin.iuml
+hide empty description
+[*] --> new : клиент оформил заказ
+new : Новый
+accepted : Принят
+cooking : Готовится
+ready : Готов к выдаче\n(курьер назначен)
+on_the_way : В пути
+delivered : Доставлен
+cancelled : Отменён
+new --> accepted : админ заведения\nпринимает
+accepted --> cooking : админ\nпередаёт на кухню
+cooking --> ready : админ\n[курьер назначен]
+ready --> on_the_way : курьер\nзабрал заказ
+on_the_way --> delivered : курьер\nвручил заказ
+new --> cancelled : клиент / админ
+accepted --> cancelled : админ\n[причина]
+cooking --> cancelled : админ\n[причина]
+ready --> cancelled : админ\n[причина]
+delivered --> [*]
+cancelled --> [*]
+@enduml

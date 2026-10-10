@@ -1,0 +1,27 @@
+@startuml
+!include skin.iuml
+actor "Пользователь" as U
+participant "LoginPage\n(Angular)" as FE
+participant "AuthService\n(Angular)" as AS
+participant "AuthController" as C
+participant "AuthService\n(сервер)" as S
+participant "JwtTokenService" as J
+database "PostgreSQL" as DB
+U -> FE : телефон, пароль
+FE -> AS : login(phone, password)
+AS -> C : POST /api/auth/login
+C -> S : Login(request)
+S -> DB : SELECT users WHERE phone = …
+DB --> S : запись пользователя
+S -> S : проверка хеша пароля (PBKDF2)\nи признака is_active
+S -> J : Issue(user)
+J --> S : JWT (HS256), срок 12 ч
+S --> C : AuthResponse
+C --> AS : 200 OK {token, user}
+AS -> AS : сохранить сессию,\nустановить язык
+AS --> FE : user.role
+FE -> U : переход в раздел роли\n(/, /manage, /courier, /admin)
+== Последующие запросы ==
+FE -> C : GET /api/... \nAuthorization: Bearer <token>
+note right of C : BearerAuthenticationHandler проверяет\nподпись, срок и активность; [Authorize(Roles)]\nпроверяет роль → 401 / 403 / 200
+@enduml

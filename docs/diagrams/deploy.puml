@@ -1,0 +1,18 @@
+@startuml
+!include skin.iuml
+node "Устройство пользователя\n(ПК / смартфон)" as client {
+  artifact "Браузер:\nAngular SPA (HTML, JS, CSS)" as spa
+}
+node "Сервер приложений" as app {
+  node "ASP.NET Core 8 (Kestrel)" as kestrel {
+    artifact "TezRason.Api.dll\n(REST API)" as dll
+    artifact "wwwroot\n(собранное Angular-приложение)" as www
+  }
+}
+node "Сервер БД" as dbs {
+  database "PostgreSQL 16\nбаза tezrason" as db
+}
+spa --> kestrel : HTTPS :443 / :5080\nстатические файлы + /api (JSON)
+dll --> db : TCP :5432 (Npgsql)
+note bottom of app : В учебной среде все узлы разворачиваются\nна одном компьютере или через docker compose\n(контейнеры db и api)
+@enduml

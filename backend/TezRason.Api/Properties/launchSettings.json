@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Demo (InMemory)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5080",
+      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" }
+    },
+    "PostgreSQL": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5080",
+      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Production" }
+    }
+  }
+}

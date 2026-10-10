@@ -1,0 +1,48 @@
+/* Дизайн-система TezRason (табл. 2.18 отчёта) */
+:root {
+  --tz-primary: #059669;
+  --tz-primary-dark: #047857;
+  --tz-bg: #f8fafc;
+  --tz-surface: #ffffff;
+  --tz-text: #0f172a;
+  --tz-muted: #64748b;
+  --tz-border: #e2e8f0;
+  --tz-radius: 12px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--tz-bg);
+  color: var(--tz-text);
+  font-size: 14px;
+}
+a { color: inherit; text-decoration: none; }
+
+.container { max-width: 1160px; margin: 0 auto; padding: 24px 16px; }
+.card { background: var(--tz-surface); border: 1px solid #eef2f6; border-radius: var(--tz-radius); box-shadow: 0 1px 3px rgba(15, 23, 42, .06); }
+.muted { color: var(--tz-muted); }
+.green { color: var(--tz-primary); }
+.row { display: flex; align-items: center; gap: 12px; }
+.between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.grid { display: grid; gap: 16px; }
+.page-title { font-size: 22px; font-weight: 600; margin: 0 0 16px; }
+.section-title { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
+.ph {
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  display: grid; place-items: center; color: var(--tz-primary);
+}
+.ph i { font-size: 30px; }
+.kpi { padding: 16px; }
+.kpi .label { color: var(--tz-muted); font-size: 12px; }
+.kpi .value { font-size: 24px; font-weight: 600; margin-top: 4px; }
+.bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+.bar > div { height: 100%; background: var(--tz-primary); border-radius: 4px; }
+.empty { text-align: center; padding: 48px 16px; color: var(--tz-muted); }
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+@media (max-width: 768px) {
+  .container { padding: 16px 12px; }
+  .hide-mobile { display: none !important; }
+}

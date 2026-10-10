@@ -1,0 +1,43 @@
+@startuml
+!include skin.iuml
+skinparam componentStyle rectangle
+
+package "Клиентская часть (браузер)\nAngular 20 + PrimeNG" as FE {
+  [Страницы клиента\n(каталог, меню, корзина,\nоформление, отслеживание)] as P1
+  [Панель заведения] as P2
+  [Панель курьера] as P3
+  [Панель суперадмина] as P4
+  [AuthService\n+ roleGuard] as AS
+  [CartService] as CS
+  [I18nService\n(RU / TJ)] as IS
+  [ApiService\n+ authInterceptor] as API
+}
+package "Серверная часть\nASP.NET Core 8 Web API" as BE {
+  [ErrorHandling\nMiddleware] as MW
+  [Bearer-аутентификация\n(JwtTokenService)] as AUTH
+  [Контроллеры:\nAuth, Restaurants, Orders,\nManage, Courier, Admin] as CTRL
+  [Сервисы:\nAuth, Catalog, Order,\nMenuManagement, Stats, Admin] as SVC
+  [OrderStatusMachine] as SM
+  [IAppDataContext] as DAL
+  [AppDbContext\n(EF Core)] as EF
+  [InMemoryDataContext\n(демо-режим)] as MEM
+}
+database "PostgreSQL 16\n15 таблиц" as DB
+
+P1 --> API
+P2 --> API
+P3 --> API
+P4 --> API
+P1 --> CS
+API --> AS
+API ..> IS
+API --> MW : HTTPS / JSON\nREST
+MW --> AUTH
+AUTH --> CTRL
+CTRL --> SVC
+SVC --> SM
+SVC --> DAL
+DAL <|.. EF
+DAL <|.. MEM
+EF --> DB : SQL (Npgsql)
+@enduml

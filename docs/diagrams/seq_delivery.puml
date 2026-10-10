@@ -1,0 +1,32 @@
+@startuml
+!include skin.iuml
+actor "Админ заведения" as A
+actor "Курьер" as K
+participant "ManageController /\nCourierController" as C
+participant "OrderService" as S
+participant "OrderStatusMachine" as M
+database "PostgreSQL" as DB
+actor "Клиент" as U
+A -> C : POST /manage/orders/{id}/status {accepted}
+C -> S : ChangeStatus(...)
+S -> M : CanTransition(new, accepted, restaurant_admin)
+M --> S : true
+S -> DB : UPDATE orders; INSERT history
+A -> C : status {cooking}
+A -> C : POST /manage/orders/{id}/courier {courierId}
+C -> S : AssignCourier → проверка «на смене»
+A -> C : status {ready}
+S -> M : проверка перехода + курьер назначен
+K -> C : GET /courier/orders
+C --> K : заказ «Готов к выдаче»
+K -> C : POST /courier/orders/{id}/picked-up
+C -> S : ChangeStatus(on_the_way, courier)
+K -> C : POST /courier/orders/{id}/delivered
+C -> S : ChangeStatus(delivered) + delivered_at
+loop каждые 15 секунд
+  U -> C : GET /api/orders/{id}
+  C --> U : текущий статус и история
+end
+U -> C : POST /api/orders/{id}/review
+C -> S : AddReview → пересчёт рейтингов
+@enduml

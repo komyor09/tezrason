@@ -1,0 +1,29 @@
+@startuml
+!include skin.iuml
+actor "Клиент" as U
+participant "RestaurantMenuPage /\nCheckoutPage" as FE
+participant "CartService" as CS
+participant "OrdersController" as C
+participant "OrderService" as S
+participant "CatalogService" as CAT
+database "PostgreSQL" as DB
+U -> FE : открыть меню заведения
+FE -> C : GET /api/restaurants/{id}/menu
+C --> FE : категории, блюда, акции
+U -> FE : «+» у блюд
+FE -> CS : add(restaurant, dish)
+CS -> CS : хранение корзины в браузере
+U -> FE : адрес, телефон, «Подтвердить заказ»
+FE -> C : POST /api/orders {restaurantId, items, address…}
+C -> S : Create(clientId, request)
+S -> DB : заведение
+S -> CAT : OpenState(restaurant) — режим работы
+S -> DB : блюда корзины
+S -> S : проверки, расчёт суммы,\nскидки и доставки
+S -> DB : INSERT orders (status = new)
+S -> DB : INSERT order_items, order_status_history
+S --> C : OrderDto
+C --> FE : 200 OK {id, orderNumber, total…}
+FE -> CS : clear()
+FE -> U : страница отслеживания /orders/{id}
+@enduml
