@@ -22,5 +22,16 @@ export const routes: Routes = [
   // Суперадминистратор
   { path: 'admin', canActivate: [roleGuard('super_admin')], loadComponent: () => import('./pages/admin/admin').then((m) => m.AdminPage) },
 
-  { path: '**', redirectTo: '' },
+  // Дополнительный интерфейс: контентные страницы и документы
+  { path: 'about', loadComponent: () => import('./pages/info/info-pages').then((m) => m.AboutPage) },
+  { path: 'help', loadComponent: () => import('./pages/info/info-pages').then((m) => m.HelpPage) },
+  { path: 'faq', loadComponent: () => import('./pages/info/info-pages').then((m) => m.FaqPage) },
+  { path: 'credits', loadComponent: () => import('./pages/info/info-pages').then((m) => m.CreditsPage) },
+  { path: 'legal', loadComponent: () => import('./pages/info/info-pages').then((m) => m.LegalPage) },
+  { path: 'terms', data: { name: 'terms' }, loadComponent: () => import('./pages/info/info-pages').then((m) => m.DocPage) },
+  { path: 'privacy', data: { name: 'privacy' }, loadComponent: () => import('./pages/info/info-pages').then((m) => m.DocPage) },
+  { path: 'courier-rules', data: { name: 'courier-rules' }, loadComponent: () => import('./pages/info/info-pages').then((m) => m.DocPage) },
+  { path: 'partners', data: { name: 'partners' }, loadComponent: () => import('./pages/info/info-pages').then((m) => m.DocPage) },
+
+  { path: '**', loadComponent: () => import('./pages/info/info-pages').then((m) => m.NotFoundPage) },
 ];

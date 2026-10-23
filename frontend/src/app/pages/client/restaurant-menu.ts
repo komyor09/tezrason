@@ -20,7 +20,7 @@ import { MoneyPipe } from '../../core/ui';
         <div>
           <a routerLink="/" class="back muted"><i class="pi pi-arrow-left"></i> {{ 'allRestaurants' | t }}</a>
           <div class="card head">
-            <div class="ph logo"><i class="pi pi-shop"></i></div>
+            <img class="logo" [src]="m.restaurant.logoUrl || '/img/covers/chaikhona.svg'" alt="" />
             <div>
               <h1>{{ m.restaurant.name }}</h1>
               <div class="muted">{{ m.restaurant.cuisine }} · {{ m.restaurant.addressLine }}</div>
@@ -46,7 +46,7 @@ import { MoneyPipe } from '../../core/ui';
           <div class="grid dishes">
             @for (d of visibleDishes(); track d.id) {
               <div class="card dish">
-                <div class="ph pic"><i class="pi pi-image"></i></div>
+                <img class="pic" [src]="d.imageUrl || '/img/dishes/plov.svg'" [alt]="i18n.pick(d, 'name')" />
                 <div class="info">
                   <div class="dname">{{ i18n.pick(d, 'name') }}</div>
                   <div class="muted small">{{ i18n.pick(d, 'description') }}@if (d.weightG) { · {{ d.weightG }} г }</div>
@@ -77,7 +77,7 @@ import { MoneyPipe } from '../../core/ui';
             <p-button [label]="'toCheckout' | t" [style]="{ width: '100%' }" [disabled]="cart.belowMinimum()" (onClick)="checkout()" />
             <div class="muted small center">{{ 'minOrder' | t }} — {{ m.restaurant.minOrderAmount | money }}</div>
           } @else {
-            <div class="empty small"><i class="pi pi-shopping-cart big"></i><br />{{ 'cartEmpty' | t }}</div>
+            <div class="empty small"><img src="/img/ui/empty-cart.svg" alt="" class="emptyimg" /><br />{{ 'cartEmpty' | t }}</div>
           }
         </aside>
       </div>
@@ -87,7 +87,8 @@ import { MoneyPipe } from '../../core/ui';
     .layout { display: grid; grid-template-columns: 1fr 330px; gap: 24px; align-items: start; }
     .back { display: inline-flex; gap: 6px; align-items: center; margin-bottom: 12px; }
     .head { display: flex; gap: 18px; align-items: center; padding: 20px; }
-    .logo { width: 76px; height: 76px; border-radius: 12px; flex-shrink: 0; }
+    .logo { width: 150px; height: 76px; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
+    .emptyimg { width: 160px; border-radius: 12px; }
     h1 { margin: 0 0 4px; font-size: 22px; }
     .meta { margin-top: 8px; flex-wrap: wrap; font-size: 13px; }
     .star { color: #f59e0b; font-size: 12px; }
@@ -97,7 +98,7 @@ import { MoneyPipe } from '../../core/ui';
     .chip.on { background: #dcfce7; color: #15803d; font-weight: 500; }
     .dishes { grid-template-columns: 1fr 1fr; gap: 14px; }
     .dish { display: flex; gap: 14px; align-items: center; padding: 12px; }
-    .pic { width: 80px; height: 80px; border-radius: 8px; flex-shrink: 0; }
+    .pic { width: 84px; height: 84px; border-radius: 10px; flex-shrink: 0; object-fit: cover; }
     .info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .dname { font-weight: 500; }
     .small { font-size: 12px; }

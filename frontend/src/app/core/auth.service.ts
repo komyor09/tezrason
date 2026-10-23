@@ -23,8 +23,8 @@ export class AuthService {
     return this.http.post<AuthResponse>('/api/auth/login', { phone, password }).pipe(tap((r) => this.save(r)));
   }
 
-  register(fullName: string, phone: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>('/api/auth/register', { fullName, phone, password, language: this.i18n.lang() })
+  register(fullName: string, phone: string, password: string, acceptTerms: boolean): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>('/api/auth/register', { fullName, phone, password, acceptTerms, language: this.i18n.lang() })
       .pipe(tap((r) => this.save(r)));
   }
 

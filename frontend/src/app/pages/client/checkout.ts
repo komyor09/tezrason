@@ -25,7 +25,7 @@ import { MoneyPipe } from '../../core/ui';
           <div class="section-title">{{ 'cart' | t }}</div>
           @for (l of cart.lines(); track l.dish.id) {
             <div class="line">
-              <div class="ph pic"><i class="pi pi-image"></i></div>
+              <img class="pic" [src]="l.dish.imageUrl || '/img/dishes/plov.svg'" alt="" />
               <div class="grow"><div>{{ i18n.pick(l.dish, 'name') }}</div><div class="muted small">{{ l.dish.price | money }}</div></div>
               <div class="qty">
                 <p-button icon="pi pi-minus" [text]="true" size="small" (onClick)="cart.change(l.dish.id, -1)" />
@@ -66,7 +66,7 @@ import { MoneyPipe } from '../../core/ui';
     .back { display: inline-flex; gap: 6px; align-items: center; margin-bottom: 12px; }
     .box { padding: 20px; margin-bottom: 16px; }
     .line { display: flex; align-items: center; gap: 14px; background: #f8fafc; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
-    .pic { width: 52px; height: 52px; border-radius: 8px; }
+    .pic { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; }
     .grow { flex: 1; }
     .small { font-size: 12px; }
     .qty { display: flex; align-items: center; gap: 2px; background: #fff; border-radius: 8px; }

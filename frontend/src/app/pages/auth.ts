@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { CheckboxModule } from 'primeng/checkbox';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { AuthService } from '../core/auth.service';
@@ -21,6 +22,8 @@ const AUTH_STYLES = `
   :host ::ng-deep .p-password, :host ::ng-deep .p-password input, :host ::ng-deep p-iconfield { width: 100%; }
   .alt { text-align: center; margin-top: 20px; color: var(--tz-muted); }
   .demo { margin-top: 22px; border-top: 1px dashed var(--tz-border); padding-top: 14px; font-size: 12px; color: var(--tz-muted); }
+  .consent { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; }
+  .consent label { margin: 0; font-size: 12px; line-height: 1.5; }
   .demo button { background: #f1f5f9; border: 0; border-radius: 6px; padding: 4px 8px; margin: 3px; cursor: pointer; font-size: 12px; }
 `;
 
@@ -74,7 +77,7 @@ export class LoginPage {
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterLink, ButtonModule, InputTextModule, PasswordModule, TranslatePipe],
+  imports: [FormsModule, RouterLink, ButtonModule, InputTextModule, PasswordModule, CheckboxModule, TranslatePipe],
   template: `
     <div class="wrap">
       <form class="card box" (ngSubmit)="submit()">
@@ -86,7 +89,12 @@ export class LoginPage {
         <input pInputText class="full" name="phone" [(ngModel)]="phone" placeholder="+992XXXXXXXXX" />
         <label>{{ 'password' | t }}</label>
         <p-password name="password" [(ngModel)]="password" [toggleMask]="true" inputStyleClass="full" />
-        <p-button type="submit" [label]="'register' | t" [loading]="busy()" [style]="{ width: '100%', marginTop: '22px' }" />
+        <div class="consent">
+          <p-checkbox name="accept" [(ngModel)]="accept" [binary]="true" inputId="accept" />
+          <label for="accept">{{ 'acceptTerms1' | t }} <a routerLink="/terms" target="_blank" class="green">{{ 'terms' | t }}</a>
+            {{ 'and' | t }} <a routerLink="/privacy" target="_blank" class="green">{{ 'privacy' | t }}</a></label>
+        </div>
+        <p-button type="submit" [label]="'register' | t" [loading]="busy()" [disabled]="!accept" [style]="{ width: '100%', marginTop: '18px' }" />
         <div class="alt">{{ 'haveAccount' | t }} <a routerLink="/login" class="green">{{ 'login' | t }}</a></div>
       </form>
     </div>
@@ -100,11 +108,12 @@ export class RegisterPage {
   fullName = '';
   phone = '+992';
   password = '';
+  accept = false;
   busy = signal(false);
 
   submit() {
     this.busy.set(true);
-    this.auth.register(this.fullName, this.phone, this.password).subscribe({
+    this.auth.register(this.fullName, this.phone, this.password, this.accept).subscribe({
       next: () => this.router.navigateByUrl('/'),
       error: (e) => { this.busy.set(false); this.api.fail(e); },
     });

@@ -16,7 +16,7 @@ import { I18nService, TranslatePipe } from '../core/i18n.service';
     <header class="top">
       <div class="inner">
         <a class="logo" [routerLink]="home()">
-          <span class="ic"><i class="pi pi-shopping-bag"></i></span>
+          <img src="/img/ui/logo.svg" alt="" width="36" height="36" />
           <span><b>TezRason</b><small>{{ 'appSubtitle' | t }}</small></span>
         </a>
 
@@ -28,6 +28,8 @@ import { I18nService, TranslatePipe } from '../core/i18n.service';
             @default {
               <a routerLink="/" routerLinkActive="on" [routerLinkActiveOptions]="{ exact: true }">{{ 'restaurants' | t }}</a>
               @if (auth.user()) { <a routerLink="/orders" routerLinkActive="on">{{ 'myOrders' | t }}</a> }
+              <a routerLink="/help" routerLinkActive="on">{{ 'help' | t }}</a>
+              <a routerLink="/about" routerLinkActive="on">{{ 'about' | t }}</a>
             }
           }
         </nav>
@@ -44,7 +46,7 @@ import { I18nService, TranslatePipe } from '../core/i18n.service';
             <span class="user hide-mobile">{{ u.fullName }}</span>
             <p-button icon="pi pi-sign-out" [text]="true" severity="secondary" (onClick)="auth.logout()" [ariaLabel]="'logout' | t" />
           } @else {
-            <p-button [label]="'login' | t" icon="pi pi-user" size="small" routerLink="/login" />
+            <p-button [label]="'login' | t" icon="pi pi-user" size="small" [rounded]="true" routerLink="/login" />
           }
         </div>
       </div>
@@ -57,11 +59,11 @@ import { I18nService, TranslatePipe } from '../core/i18n.service';
     .logo .ic { width: 36px; height: 36px; border-radius: 9px; background: var(--tz-primary); color: #fff; display: grid; place-items: center; }
     .logo b { display: block; color: var(--tz-primary); font-size: 15px; }
     .logo small { color: var(--tz-muted); font-size: 11px; }
-    .nav { display: flex; gap: 20px; }
+    .nav { display: flex; gap: 26px; margin: 0 auto; font-weight: 500; }
     .nav a { color: #475569; padding: 6px 0; border-bottom: 2px solid transparent; }
     .nav a.on { color: var(--tz-primary); border-color: var(--tz-primary); }
     .nav .title { font-weight: 500; }
-    .right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+    .right { margin-left: 0; display: flex; align-items: center; gap: 12px; }
     .user { color: #334155; }
     .cart { font-size: 20px; color: var(--tz-primary); margin-right: 8px; }
   `,
