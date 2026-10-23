@@ -166,6 +166,29 @@ public static class DataSeeder
                 ("Калифорния", "Калифорния", "Краб, авокадо, икра масаго", 65m, 250),
             }),
             ("Супы", "Шӯрбоҳо", new[] { ("Мисо-суп", "Шӯрбои мисо", "Тофу, водоросли вакаме", 25m, 300) }));
+        // Визуальный контент: фотографии блюд и обложки заведений (frontend/public/img/photos).
+        // Источники и лицензии фотографий — /content/photo-credits.json (страница «Источники изображений»).
+        var photos = new Dictionary<string, string>
+        {
+            ["Плов ош"] = "plov-osh", ["Шурбо"] = "shurbo", ["Манту (5 шт.)"] = "manti", ["Лагман"] = "lagman",
+            ["Кабоб из баранины"] = "kabob-lamb", ["Шашлык из курицы"] = "shashlik-chicken", ["Самбуса с мясом"] = "samsa",
+            ["Лепёшка тандырная"] = "non", ["Зелёный чай (чайник)"] = "green-tea", ["Компот"] = "kompot",
+            ["Маргарита"] = "margherita", ["Пепперони"] = "pepperoni", ["Четыре сыра"] = "quattro-formaggi",
+            ["Карбонара"] = "carbonara", ["Лимонад"] = "lemonade", ["Плов ферганский"] = "plov-fergana",
+            ["Плов свадебный"] = "plov-wedding", ["Люля-кебаб"] = "lula-kebab", ["Ачичук"] = "achichuk",
+            ["Филадельфия"] = "philadelphia", ["Калифорния"] = "california", ["Мисо-суп"] = "miso",
+        };
+        foreach (var d in dishes.Values)
+            if (photos.TryGetValue(d.NameRu, out var key)) d.ImageUrl = $"/img/photos/dishes/{key}.jpg";
+        db.SaveChanges();
+
+        var covers = new Dictionary<string, string>
+        {
+            ["Чайхона №1"] = "chaikhona", ["Пицца Маэстро"] = "pizza", ["Плов Сити"] = "plov",
+            ["Суши Бар Токио"] = "sushi", ["Бургер Хаус"] = "burger", ["Кофе Экспресс"] = "coffee",
+        };
+        foreach (var r in db.Restaurants.ToList())
+            if (covers.TryGetValue(r.Name, out var c)) r.LogoUrl = $"/img/photos/covers/{c}.jpg";
         db.SaveChanges();
 
         db.Add(new Promotion

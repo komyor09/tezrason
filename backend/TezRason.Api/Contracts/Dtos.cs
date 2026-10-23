@@ -1,7 +1,7 @@
 namespace TezRason.Api.Contracts;
 
 // ---------- Аутентификация ----------
-public record RegisterRequest(string FullName, string Phone, string Password, string? Email, string? Language);
+public record RegisterRequest(string FullName, string Phone, string Password, string? Email, string? Language, bool AcceptTerms = false);
 public record LoginRequest(string Phone, string Password);
 public record UserDto(long Id, string FullName, string Phone, string? Email, string Role, string Language, bool IsActive);
 public record AuthResponse(string Token, DateTime ExpiresAt, UserDto User);

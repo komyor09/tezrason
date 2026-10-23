@@ -51,7 +51,7 @@ public sealed class AdminService
 
     public AdminRestaurantDto CreateRestaurant(CreateRestaurantRequest req)
     {
-        var owner = _auth.Register(new RegisterRequest(req.OwnerFullName, req.OwnerPhone, req.OwnerPassword, null, "ru")).User;
+        var owner = _auth.Register(new RegisterRequest(req.OwnerFullName, req.OwnerPhone, req.OwnerPassword, null, "ru"), requireConsent: false).User;
         var user = _db.Users.First(u => u.Id == owner.Id);
         user.RoleId = Roles.IdOf(Roles.RestaurantAdmin);
 
@@ -74,7 +74,7 @@ public sealed class AdminService
     public UserDto CreateCourier(CreateCourierRequest req)
     {
         if (req.TransportType is not ("foot" or "bicycle" or "scooter" or "car")) throw ApiException.BadRequest("Неизвестный вид транспорта");
-        var dto = _auth.Register(new RegisterRequest(req.FullName, req.Phone, req.Password, null, "ru")).User;
+        var dto = _auth.Register(new RegisterRequest(req.FullName, req.Phone, req.Password, null, "ru"), requireConsent: false).User;
         var user = _db.Users.First(u => u.Id == dto.Id);
         user.RoleId = Roles.IdOf(Roles.Courier);
         _db.Add(new CourierProfile { UserId = user.Id, TransportType = req.TransportType });

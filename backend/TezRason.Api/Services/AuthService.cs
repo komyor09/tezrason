@@ -26,8 +26,16 @@ public sealed class AuthService
 
     public string HashPassword(string password) => _hasher.HashPassword(new User(), password);
 
-    public AuthResponse Register(RegisterRequest r)
+    public AuthResponse Register(RegisterRequest r) => Register(r, requireConsent: true);
+
+    /// <summary>
+    /// Регистрация. Для самостоятельной регистрации клиента обязательно согласие с пользовательским
+    /// соглашением и политикой конфиденциальности (ст. 11 Закона РТ «О защите персональных данных»).
+    /// </summary>
+    public AuthResponse Register(RegisterRequest r, bool requireConsent)
     {
+        if (requireConsent && !r.AcceptTerms)
+            throw ApiException.BadRequest("Необходимо принять пользовательское соглашение и политику конфиденциальности");
         var phone = NormalizePhone(r.Phone);
         if (string.IsNullOrWhiteSpace(r.FullName) || r.FullName.Trim().Length < 2)
             throw ApiException.BadRequest("Укажите имя (не менее 2 символов)");
