@@ -26,9 +26,11 @@ console.log('1. Аутентификация');
 let r = await call('POST', '/auth/login', null, { phone: '+992900000001', password: 'wrong' });
 check('неверный пароль отклоняется (401)', r.status === 401);
 const phone = '+99299' + String(Date.now()).slice(-7);
-r = await call('POST', '/auth/register', null, { fullName: 'Тестовый Клиент', phone, password: 'secret1' });
+r = await call('POST', '/auth/register', null, { fullName: 'Без согласия', phone, password: 'secret1' });
+check('регистрация без согласия с соглашением отклоняется (400)', r.status === 400);
+r = await call('POST', '/auth/register', null, { fullName: 'Тестовый Клиент', phone, password: 'secret1', acceptTerms: true });
 check('регистрация нового клиента', r.status === 200 && r.data.user.role === 'client', JSON.stringify(r.data));
-r = await call('POST', '/auth/register', null, { fullName: 'Дубль', phone, password: 'secret1' });
+r = await call('POST', '/auth/register', null, { fullName: 'Дубль', phone, password: 'secret1', acceptTerms: true });
 check('повторная регистрация телефона отклоняется (409)', r.status === 409);
 const client = await login('+992900000001');
 const admin = await login('+992910000001');      // администратор «Чайхона №1»
