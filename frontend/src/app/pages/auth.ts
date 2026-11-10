@@ -91,10 +91,13 @@ export class LoginPage {
         <p-password name="password" [(ngModel)]="password" [toggleMask]="true" inputStyleClass="full" />
         <div class="consent">
           <p-checkbox name="accept" [(ngModel)]="accept" [binary]="true" inputId="accept" />
-          <label for="accept">{{ 'acceptTerms1' | t }} <a routerLink="/terms" target="_blank" class="green">{{ 'terms' | t }}</a>
-            {{ 'and' | t }} <a routerLink="/privacy" target="_blank" class="green">{{ 'privacy' | t }}</a></label>
+          <label for="accept">{{ 'acceptTerms1' | t }} <a routerLink="/terms" target="_blank" class="green">{{ 'terms' | t }}</a></label>
         </div>
-        <p-button type="submit" [label]="'register' | t" [loading]="busy()" [disabled]="!accept" [style]="{ width: '100%', marginTop: '18px' }" />
+        <div class="consent">
+          <p-checkbox name="acceptPd" [(ngModel)]="acceptPd" [binary]="true" inputId="acceptPd" />
+          <label for="acceptPd">{{ 'consentPd1' | t }} <a routerLink="/privacy" target="_blank" class="green">{{ 'consentPd2' | t }}</a></label>
+        </div>
+        <p-button type="submit" [label]="'register' | t" [loading]="busy()" [disabled]="!accept || !acceptPd" [style]="{ width: '100%', marginTop: '18px' }" />
         <div class="alt">{{ 'haveAccount' | t }} <a routerLink="/login" class="green">{{ 'login' | t }}</a></div>
       </form>
     </div>
@@ -109,11 +112,12 @@ export class RegisterPage {
   phone = '+992';
   password = '';
   accept = false;
+  acceptPd = false;
   busy = signal(false);
 
   submit() {
     this.busy.set(true);
-    this.auth.register(this.fullName, this.phone, this.password, this.accept).subscribe({
+    this.auth.register(this.fullName, this.phone, this.password, this.accept, this.acceptPd).subscribe({
       next: () => this.router.navigateByUrl('/'),
       error: (e) => { this.busy.set(false); this.api.fail(e); },
     });

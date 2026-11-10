@@ -7,3 +7,4 @@ backend/TezRason.Api/wwwroot/
 *.user
 .vs/
 .vscode/
+.idea/

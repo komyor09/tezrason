@@ -35,7 +35,9 @@ public sealed class AuthService
     public AuthResponse Register(RegisterRequest r, bool requireConsent)
     {
         if (requireConsent && !r.AcceptTerms)
-            throw ApiException.BadRequest("Необходимо принять пользовательское соглашение и политику конфиденциальности");
+            throw ApiException.BadRequest("Необходимо принять пользовательское соглашение");
+        if (requireConsent && !r.AcceptPersonalData)
+            throw ApiException.BadRequest("Необходимо дать согласие на обработку персональных данных");
         var phone = NormalizePhone(r.Phone);
         if (string.IsNullOrWhiteSpace(r.FullName) || r.FullName.Trim().Length < 2)
             throw ApiException.BadRequest("Укажите имя (не менее 2 символов)");
